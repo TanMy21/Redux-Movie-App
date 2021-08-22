@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { BiCameraMovie } from "react-icons/bi";
 import { FiHeart } from "react-icons/fi";
+import { addMovies } from '../actions';
 
 class App extends React.Component {
   constructor() {
@@ -22,10 +23,7 @@ class App extends React.Component {
       this.forceUpdate();
     });
 
-    store.dispatch({
-      type: "ADD_MOVIES",
-      movies: data,
-    });
+    store.dispatch(addMovies(data));
 
     console.log('STATE ',this.props.store.getState());
   }
