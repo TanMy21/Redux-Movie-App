@@ -32,7 +32,7 @@ class App extends React.Component {
     this.setState({ checked: event.target.checked });
 
   render() {
-    const movies = this.props.store.getState();
+    const { list } = this.props.store.getState();
     // const [checked, setChecked] = useState(true);
 
     return (
@@ -64,7 +64,7 @@ class App extends React.Component {
             </div>
           </div>
           <div className="list">
-            {movies.map((movie, index) => {
+            {list.map((movie, index) => {
               return <MovieCard movie={movie} key={`movies-${index}`} />;
             })}
           </div>
