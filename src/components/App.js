@@ -1,40 +1,79 @@
-import React, {useState} from 'react';
-import { data } from '../data';
-import Navbar from './Navbar';
-import MovieCard from './MovieCard';
-import { BiCameraMovie } from 'react-icons/bi';
-import { FiHeart } from 'react-icons/fi';
+import React from "react";
+import { data } from "../data";
+import Navbar from "./Navbar";
+import MovieCard from "./MovieCard";
+import { BiCameraMovie } from "react-icons/bi";
+import { FiHeart } from "react-icons/fi";
 
-function App() {
+class App extends React.Component {
+  constructor() {
+    super();
 
-  const [checked, setChecked] = useState(true);
+    this.state = {
+      checked: true,
+    };
+  }
 
-  return (
-    <div className="App">
+  componentDidMount() {
+    const { store } = this.props;
+
+    store.subscribe(() => {
+      console.log('UPDATED');
+      this.forceUpdate();
+    });
+
+    store.dispatch({
+      type: "ADD_MOVIES",
+      movies: data,
+    });
+
+    console.log('STATE ',this.props.store.getState());
+  }
+
+  handleCheckboxChange = (event) =>
+    this.setState({ checked: event.target.checked });
+
+  render() {
+    const movies = this.props.store.getState();
+    // const [checked, setChecked] = useState(true);
+
+    return (
+      <div className="App">
         <Navbar />
         <div className="main">
           <div className="tabs">
             {/* <div className="tab">Movies</div>
-            <div className="tab">Favourites</div> */}
+              <div className="tab">Favourites</div> */}
             <div className="tab-2">
-              <label htmlFor="tab2-1"><BiCameraMovie id='icons'/>Movies</label>
-              <input id="tab2-1" name="tabs-two" type="radio" checked={checked} onChange={() => setChecked(!checked)} />      
+              <label htmlFor="tab2-1">
+                <BiCameraMovie id="icons" />
+                Movies
+              </label>
+              <input
+                id="tab2-1"
+                name="tabs-two"
+                type="radio"
+                checked={this.state.checked}
+                onChange={this.handleCheckboxChange}
+              />
             </div>
             <div className="tab-2">
-                <label htmlFor="tab2-2"><FiHeart id='icons'/>Favourites</label>
-                <input id="tab2-2" name="tabs-two" type="radio" />              
+              <label htmlFor="tab2-2">
+                <FiHeart id="icons" />
+                Favourites
+              </label>
+              <input id="tab2-2" name="tabs-two" type="radio" />
             </div>
           </div>
           <div className="list">
-            {
-              data.map((movie, index) => {
-                return(<MovieCard movie={ movie } key={ `movies-${index}` }/>)
-              })
-            }
+            {movies.map((movie, index) => {
+              return <MovieCard movie={movie} key={`movies-${index}`} />;
+            })}
           </div>
         </div>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default App;
